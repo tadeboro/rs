@@ -1,0 +1,4 @@
+target extended-remote :4242
+set gnutarget elf32-littlearm
+file FNAME
+load

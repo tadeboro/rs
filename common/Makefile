@@ -1,11 +1,17 @@
 ### CONFIGURATION ######################################################
 
+# STM library location
 STM_COMMON := /home/tadej/studij/faks/s2-racunalniski-sistemi/STM32F4-Discovery_FW_V1.1.0
 
 # Toolchain
 CC      := arm-none-eabi-gcc
 AS      := arm-none-eabi-as
 OBJCOPY := arm-none-eabi-objcopy
+GDB     := gdb
+STFLASH := st-flash
+STUTIL  := st-util
+
+### COMPILER AND LINKER FLAGS ##########################################
 
 # Common flags for compiler and linker
 FLAGS  = -g -O2 -Wall
@@ -52,12 +58,12 @@ clean:
 
 .PHONY: burn
 burn: $(NAME).bin
-	st-flash write $(NAME).bin 0x8000000
+	$(STFLASH) write $(NAME).bin 0x8000000
 
 .PHONY: gdb
 gdb: $(NAME).elf $(NAME).bin .gdbinit
-	st-util &> /tmp/st-util.log &
-	gdb
+	$(STUTIL) &> /tmp/st-util.log &
+	$(GDB)
 
 .gdbinit:
 	sed -e 's/FNAME/$(NAME).elf/' ../common/gdbinit > $@

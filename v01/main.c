@@ -2,6 +2,8 @@
 #include "stm32f4xx_conf.h"
 
 #define LIMIT 10000000
+#define LEFT  0
+#define RIGHT 1
 
 /* Initial configuration of board */
 static void
@@ -29,41 +31,38 @@ init_board(void)
   GPIO_Init(GPIOA, &GPIO_InitStructure);
 }
 
-/* Function that delays for 1 ms for each iteration of outer loop */
-static int
-delay(int ms,
-      int increment)
-{
-  int changes = 0;
-  int old = 0;
-  int new = 0;
-
-  volatile int n = 6500 * ms;
-  while (changes == 1 || n--)
-    {
-      new = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0);
-      changes += new != old;
-      old = new;
-    }
-  return changes ? (increment + 2) & 0x03 : increment;
-}
-
 /* Entry point */
 int
 main()
 {
-  unsigned int pins[] = {GPIO_Pin_12, GPIO_Pin_13, GPIO_Pin_14, GPIO_Pin_15};
+  uint16_t pins[] = {GPIO_Pin_12, GPIO_Pin_13, GPIO_Pin_14, GPIO_Pin_15};
   int active = 0;
-  int increment = 1;
+  int old;
+  int new;
+  int dir;
 
   init_board();
 
+  /* Set initial state */
+  old = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0);
+  dir = LEFT;
+
+  /* Turn on first led */
   GPIO_SetBits(GPIOD, pins[active]);
   while (1)
     {
-      increment = delay(1000, increment);
+      /* Delay */
+      volatile int n = 6500 * 300;
+      while (n--)
+        {
+          new = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0);
+          dir = (dir + (new < old)) & 1;
+          old = new;
+        }
+      /* Change led */
       GPIO_ResetBits(GPIOD, pins[active]);
-      active = (active + increment) & 0x03;
+      active += dir ? 3 : 1;
+      active &= 0x03;
       GPIO_SetBits(GPIOD, pins[active]);
     }
 

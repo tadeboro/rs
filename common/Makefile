@@ -14,7 +14,7 @@ STUTIL  := st-util
 ### COMPILER AND LINKER FLAGS ##########################################
 
 # Common flags for compiler and linker
-FLAGS  = -g -O2 -Wall
+FLAGS  = -g -Wall
 FLAGS += -mlittle-endian -mthumb -mcpu=cortex-m4 -mthumb-interwork
 FLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
 
@@ -67,3 +67,6 @@ gdb: $(NAME).elf $(NAME).bin .gdbinit
 
 .gdbinit:
 	sed -e 's/FNAME/$(NAME).elf/' ../common/gdbinit > $@
+
+### VALUABLE INTERMEDIARY FILES ########################################
+.PRECIOUS: %.o

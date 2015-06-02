@@ -54,7 +54,7 @@ main (void)
       data--;
 
       /* Delay */
-      for (i = 0; i < 59999999; i++);
+      for (i = 0; i < 5999999; i++);
 
       /* Send data */
       while (!USART_GetFlagStatus (USART1, USART_FLAG_TXE));

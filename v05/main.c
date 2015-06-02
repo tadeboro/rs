@@ -59,6 +59,11 @@ main (int    argc,
   /* Do calculations */
   res = crc(data, 4, poly, 4);
   display(res);
+  display(res);
+  display(res);
+  display(res);
+  display(res);
+  display(res);
   res = crc((data << 4) | res, 8, poly, 4);
 
   return 0;

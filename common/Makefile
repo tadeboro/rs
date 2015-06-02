@@ -14,9 +14,9 @@ STUTIL  := st-util
 ### COMPILER AND LINKER FLAGS ##########################################
 
 # Common flags for compiler and linker
-FLAGS  = -g -Wall
+FLAGS  = -g -Wall -O2
 FLAGS += -mlittle-endian -mthumb -mcpu=cortex-m4 -mthumb-interwork
-FLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
+#FLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
 
 # Compiler flags
 CFLAGS  = $(FLAGS) -DUSE_STDPERIPH_DRIVER -DSTM32F4XX

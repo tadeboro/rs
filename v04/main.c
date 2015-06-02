@@ -38,6 +38,10 @@ main (void)
 
   do
     {
+      /* Wait for data */
+      while (!USART_GetFlagStatus(USART1, USART_FLAG_RXNE));
+      data = USART_ReceiveData (USART1);
+
       /* Turn on leds */
       STM_EVAL_LEDOff (LED3);
       STM_EVAL_LEDOff (LED4);
@@ -50,16 +54,11 @@ main (void)
       data--;
 
       /* Delay */
-      for (i = 0; i < 59999999; i++);
+      for (i = 0; i < 5999999; i++);
 
       /* Send data */
       while (!USART_GetFlagStatus (USART1, USART_FLAG_TXE));
       USART_SendData (USART1, data);
-
-      /* Wait for data */
-      while (!USART_GetFlagStatus(USART1, USART_FLAG_RXNE));
-      data = USART_ReceiveData (USART1);
-
     }
   while (data > 0);
 
